@@ -1,240 +1,120 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import Icon from "@/components/ui/icon";
 
 const Index = () => {
-  const [selectedPlatform, setSelectedPlatform] = useState(0);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    experience: "",
-    motivation: "",
-    skills: "",
-  });
+  const [selectedPlatform, setSelectedPlatform] = useState(1);
 
   const platforms = [
     {
       id: "fgais",
       name: "ФГАИС «Молодежь России»",
       description: "Всероссийская информационная система для молодежи",
+      url: "", // Добавить ссылку пользователя
+      color: "from-blue-600 to-blue-700",
     },
     {
       id: "tavrida",
       name: "Таврида.Арт",
       description: "Международный молодежный образовательный форум",
+      url: "", // Добавить ссылку пользователя
+      color: "from-purple-600 to-purple-700",
+    },
+    {
+      id: "custom",
+      name: "Твой ход",
+      description: "Создай свою собственную платформу или выбери другой путь",
+      url: "#",
+      color: "from-green-600 to-green-700",
     },
   ];
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Форма отправлена:", {
-      platform: platforms[selectedPlatform],
-      ...formData,
-    });
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handlePlatformSelect = () => {
+    const platform = platforms[selectedPlatform];
+    if (platform.url && platform.url !== "#") {
+      window.open(platform.url, "_blank");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-white font-open-sans">
-      {/* Header */}
-      <header className="border-b border-gray-200 py-6">
-        <div className="max-w-4xl mx-auto px-6">
-          <h1 className="text-3xl font-oswald font-bold text-black tracking-wide">
-            ФОРУМ ИНФОРМАЦИЯ
+    <div className="min-h-screen bg-white font-open-sans flex items-center justify-center">
+      <div className="max-w-2xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-oswald font-bold text-black tracking-wide mb-4">
+            ВЫБОР ПЛАТФОРМЫ
           </h1>
-          <p className="text-gray-600 mt-2 font-open-sans">
-            Сбор информации для участия в форумах
+          <div className="w-32 h-1 bg-black mx-auto mb-6"></div>
+          <p className="text-lg text-gray-600 font-open-sans">
+            Выбери свой путь для участия в форумах
           </p>
         </div>
-      </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-12">
         {/* Platform Selector */}
-        <section className="mb-12">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-oswald font-semibold mb-4 text-black">
-              ВЫБЕРИТЕ ПЛАТФОРМУ
-            </h2>
-            <div className="w-24 h-1 bg-black mx-auto mb-6"></div>
-          </div>
-
-          <Card className="p-8 border-2 border-gray-200 shadow-sm">
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-500">
-                  {platforms[0].name}
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                  {platforms[1].name}
-                </span>
-              </div>
-
-              <Slider
-                value={[selectedPlatform]}
-                onValueChange={(value) => setSelectedPlatform(value[0])}
-                max={1}
-                min={0}
-                step={1}
-                className="w-full"
-              />
-
-              <div className="text-center pt-4">
-                <h3 className="text-xl font-oswald font-semibold text-black mb-2">
-                  {platforms[selectedPlatform].name}
-                </h3>
-                <p className="text-gray-600 font-open-sans">
-                  {platforms[selectedPlatform].description}
-                </p>
-              </div>
+        <Card className="p-10 border-2 border-gray-200 shadow-lg">
+          <div className="space-y-8">
+            {/* Platform Labels */}
+            <div className="flex items-center justify-between text-xs font-medium text-gray-500 px-2">
+              <span>ФГАИС</span>
+              <span>ТАВРИДА</span>
+              <span>ТВОЙ ХОД</span>
             </div>
-          </Card>
-        </section>
 
-        {/* Information Form */}
-        <section>
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-oswald font-semibold mb-4 text-black">
-              ЛИЧНАЯ ИНФОРМАЦИЯ
-            </h2>
-            <div className="w-24 h-1 bg-black mx-auto mb-6"></div>
+            {/* Slider */}
+            <Slider
+              value={[selectedPlatform]}
+              onValueChange={(value) => setSelectedPlatform(value[0])}
+              max={2}
+              min={0}
+              step={1}
+              className="w-full"
+            />
+
+            {/* Selected Platform Display */}
+            <div className="text-center pt-6">
+              <div
+                className={`w-20 h-20 rounded-full bg-gradient-to-br ${platforms[selectedPlatform].color} mx-auto mb-6 flex items-center justify-center`}
+              >
+                <Icon name="Target" size={32} className="text-white" />
+              </div>
+
+              <h3 className="text-2xl font-oswald font-bold text-black mb-3">
+                {platforms[selectedPlatform].name}
+              </h3>
+              <p className="text-gray-600 font-open-sans text-lg leading-relaxed mb-8">
+                {platforms[selectedPlatform].description}
+              </p>
+
+              <Button
+                onClick={handlePlatformSelect}
+                className="bg-black hover:bg-gray-800 text-white font-oswald font-medium px-8 py-3 text-lg transition-all duration-200 hover:scale-105"
+                disabled={
+                  !platforms[selectedPlatform].url ||
+                  platforms[selectedPlatform].url === "#"
+                }
+              >
+                <Icon name="ExternalLink" size={20} className="mr-2" />
+                ПЕРЕЙТИ НА ПЛАТФОРМУ
+              </Button>
+
+              {platforms[selectedPlatform].url === "#" && (
+                <p className="text-sm text-gray-500 mt-3">
+                  Ссылка будет добавлена позже
+                </p>
+              )}
+            </div>
           </div>
+        </Card>
 
-          <Card className="p-8 border-2 border-gray-200 shadow-sm">
-            <form onSubmit={handleFormSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="name"
-                    className="text-sm font-medium text-black"
-                  >
-                    Полное имя
-                  </Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="border-gray-300 focus:border-black focus:ring-black"
-                    placeholder="Введите ваше полное имя"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="email"
-                    className="text-sm font-medium text-black"
-                  >
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="border-gray-300 focus:border-black focus:ring-black"
-                    placeholder="example@email.com"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="phone"
-                  className="text-sm font-medium text-black"
-                >
-                  Телефон
-                </Label>
-                <Input
-                  id="phone"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="border-gray-300 focus:border-black focus:ring-black"
-                  placeholder="+7 (XXX) XXX-XX-XX"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="experience"
-                  className="text-sm font-medium text-black"
-                >
-                  Опыт участия в форумах
-                </Label>
-                <Textarea
-                  id="experience"
-                  value={formData.experience}
-                  onChange={(e) =>
-                    handleInputChange("experience", e.target.value)
-                  }
-                  className="border-gray-300 focus:border-black focus:ring-black min-h-[100px]"
-                  placeholder="Расскажите о вашем опыте участия в молодежных форумах..."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="motivation"
-                  className="text-sm font-medium text-black"
-                >
-                  Мотивация для участия
-                </Label>
-                <Textarea
-                  id="motivation"
-                  value={formData.motivation}
-                  onChange={(e) =>
-                    handleInputChange("motivation", e.target.value)
-                  }
-                  className="border-gray-300 focus:border-black focus:ring-black min-h-[100px]"
-                  placeholder="Почему вы хотите участвовать в этом форуме?..."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="skills"
-                  className="text-sm font-medium text-black"
-                >
-                  Навыки и компетенции
-                </Label>
-                <Textarea
-                  id="skills"
-                  value={formData.skills}
-                  onChange={(e) => handleInputChange("skills", e.target.value)}
-                  className="border-gray-300 focus:border-black focus:ring-black min-h-[100px]"
-                  placeholder="Опишите ваши ключевые навыки и области экспертизы..."
-                />
-              </div>
-
-              <div className="pt-6">
-                <Button
-                  type="submit"
-                  className="w-full bg-black hover:bg-gray-800 text-white font-oswald font-medium py-3 text-lg transition-colors duration-200"
-                >
-                  <Icon name="Send" size={20} className="mr-2" />
-                  ОТПРАВИТЬ ЗАЯВКУ
-                </Button>
-              </div>
-            </form>
-          </Card>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 py-8 mt-16">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-gray-600 font-open-sans">
-            Система сбора информации для молодежных форумов
+        {/* Footer */}
+        <div className="text-center mt-12">
+          <p className="text-gray-500 font-open-sans">
+            Система выбора платформы для молодежных форумов
           </p>
         </div>
-      </footer>
+      </div>
     </div>
   );
 };
